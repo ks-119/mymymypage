@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>개인 포트폴리오</title>
+<style>
+body{margin:0;background:#F6F1E5;font:13px Gulim,Arial,sans-serif;color:#333}
+#wrap{width:960px;margin:20px auto;background:#fff;border:1px solid #bbb}
+header{background:#D5B34A;padding:20px;border-bottom:1px solid #999}
+header h1{margin:0}
+nav{background:#EFE9D8;border-bottom:1px solid #bbb}
+nav a{display:inline-block;padding:10px 16px;text-decoration:none;color:#333;border-right:1px solid #ccc}
+nav a:hover{background:#D5B34A}
+section{margin:15px;border:1px solid #ccc;padding:15px}
+table{width:100%;border-collapse:collapse}
+td{border:1px solid #ccc;padding:12px;vertical-align:top}
+.img{width:250px;height:250px;background:#eee;border:1px solid #999;display:flex;align-items:center;justify-content:center}
+.pimg{width:100%;height:180px;background:#eee;border:1px solid #999;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+h2{margin-top:0;background:#f4eed7;padding:6px;border:1px solid #ddd;font-size:16px}
+button{padding:8px 16px;background:#D5B34A;border:1px solid #999}
+footer{text-align:center;padding:15px;background:#f3f3f3;border-top:1px solid #ccc}
+</style>
+</head>
+<body>
+<div id="wrap">
+<header><h1>PERSONAL PORTFOLIO</h1><div>개인 포트폴리오 및 진로 소개</div></header>
+<nav>
+<a href="#home">Home</a><a href="#about">About</a><a href="#projects">Projects</a><a href="#contact">Contact</a>
+</nav>
+
+<section id="home">
+<h2>Home</h2>
+<table>
+<tr>
+<td width="280"><div class="img">프로필 사진</div></td>
+<td>
+<h3>핵심 슬로건</h3>
+<p>[여기에 슬로건 입력]</p>
+<h3>소개</h3>
+<p>대학 입학사정관과 채용 담당자가 쉽게 읽을 수 있도록 구성한 개인 포트폴리오입니다. 실제 경험을 중심으로 내용을 작성하세요.</p>
+</td>
+</tr>
+</table>
+</section>
+
+<section id="about">
+<h2>About</h2>
+<h3>자기소개</h3>
+<p>[자기소개 입력]</p>
+<h3>기술 스택</h3>
+<ul>
+<li>HTML</li><li>CSS</li><li>JavaScript</li><li>Python</li><li>GitHub</li>
+</ul>
+<h3>향후 진로 계획</h3>
+<p>[진로 계획 입력]</p>
+</section>
+
+<section id="projects">
+<h2>Projects</h2>
+<table>
+<tr><td><div class="pimg">프로젝트 이미지</div><b>프로젝트 1</b><p>[설명]</p></td></tr>
+<tr><td><div class="pimg">프로젝트 이미지</div><b>프로젝트 2</b><p>[설명]</p></td></tr>
+<tr><td><div class="pimg">프로젝트 이미지</div><b>프로젝트 3</b><p>[설명]</p></td></tr>
+</table>
+</section>
+
+<section id="contact">
+<h2>Contact</h2>
+<p>Email : [이메일]</p>
+<p>GitHub : [주소]</p>
+<p>Blog : [주소]</p>
+<input placeholder="이름"><br><br>
+<textarea style="width:100%;height:120px" placeholder="메시지"></textarea><br><br>
+<button onclick="alert('예시 페이지입니다.');">전송</button>
+</section>
+
+<footer>© <span id="y"></span> Personal Portfolio</footer>
+</div>
+<script>
+document.getElementById('y').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
