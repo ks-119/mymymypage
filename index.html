@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김민규의 포트폴리오</title>
+    <!-- 웹 폰트 (Pretendard) 적용 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    
+    <style>
+        /* ==============================
+           CSS Variables
+           ============================== */
+        :root {
+            --bg-primary: #F7F5F0;     
+            --bg-secondary: #EFECE4;   
+            --accent-yellow: #D5B35C;  
+            --accent-yellow-hover: #C5A14A; 
+            --text-main: #312F2A;      
+            --text-muted: #736F65;     
+            --card-bg: #FFFFFF;        
+            
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-pill: 9999px;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 12px 32px rgba(213, 179, 92, 0.15);
+            
+            --nav-height: 70px;
+            --container-width: 1100px;
+        }
+
+        /* ==============================
+           Global Styles & Reset
+           ============================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* 커스텀 커서 사용 */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        a, button, .tag, .float-kw, .hover-tag {
+            cursor: none; 
+        }
+
+        ul { list-style: none; }
+
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ==============================
+           Custom Cursor
+           ============================== */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-yellow);
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent-yellow);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        .cursor-hover {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(213, 179, 92, 0.1);
+            border-color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            * { cursor: auto !important; }
+            .cursor-dot, .cursor-outline { display: none; }
+        }
+
+        /* ==============================
+           Scroll Progress Bar
+           ============================== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background-color: var(--accent-yellow);
+            z-index: 1001;
+            transition: width 0.1s ease-out;
+        }
+
+        /* ==============================
+           Parallax Background Shapes
+           ============================== */
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            opacity: 0.4;
+            transition: transform 0.5s ease-out;
+        }
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            background-color: var(--accent-yellow);
+            top: -100px;
+            right: -100px;
+        }
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background-color: #E2D3B1;
+            bottom: 10%;
+            left: -50px;
+        }
+
+        /* ==============================
+           Navigation
+           ============================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background-color: rgba(247, 245, 240, 0.85);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: var(--accent-yellow);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-main);
+        }
+
+        /* ==============================
+           Sections & Layout
+           ============================== */
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 60px;
+            font-weight: 400;
+        }
+
+        /* ==============================
+           Home Section (텍스트 중앙 정렬)
+           ============================== */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: var(--nav-height);
+        }
+
+        .home-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .home-text h1 {
+            font-size: 4rem; 
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 24px;
+            letter-spacing: -0.04em;
+        }
+
+        .home-text h1 span.highlight {
+            color: var(--accent-yellow);
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--text-main);
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .home-text p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin: 0 auto 40px auto;
+            max-width: 90%;
+            animation: slideUp 1s 0.5s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-yellow);
+            color: #FFFFFF;
+            padding: 16px 36px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: none;
+            opacity: 0;
+            animation: slideUp 1s 0.7s forwards;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-yellow-hover);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* ==============================
+           About Section
+           ============================== */
+        #about {
+            background-color: var(--card-bg);
+            border-radius: 40px;
+            margin: 0 20px 80px 20px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease;
+        }
+
+        #about:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr; 
+            gap: 60px;
+            align-items: center; 
+        }
+
+        /* 배경 없는 떠다니는 키워드 컨테이너 */
+        .keyword-cloud-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            min-height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 둥둥 떠다니는 키워드 */
+        .float-kw {
+            position: absolute;
+            background-color: var(--card-bg);
+            color: var(--accent-yellow-hover);
+            padding: 10px 20px;
+            border-radius: var(--radius-pill);
+            font-weight: 700;
+            font-size: 1.05rem;
+            box-shadow: var(--shadow-md);
+            z-index: 2;
+            animation: floatBubble 4s ease-in-out infinite;
+            white-space: nowrap;
+            transition: transform 0.2s, background-color 0.2s, color 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(213, 179, 92, 0.2);
+            cursor: pointer;
+        }
+
+        .float-kw:hover {
+            background-color: var(--accent-yellow);
+            color: white;
+            animation-play-state: paused;
+            transform: scale(1.1) !important;
+            box-shadow: 0 8px 20px rgba(213, 179, 92, 0.4);
+        }
+
+        .float-kw.active-kw {
+            background-color: var(--text-main);
+            color: white;
+            border-color: var(--text-main);
+            animation-play-state: paused;
+            transform: scale(1.05) !important;
+        }
+
+        /* 각 키워드 위치 조정 (5개 배치) */
+        .kw-1 { top: 10%; left: 8%; animation-delay: 0s; }
+        .kw-2 { top: 25%; right: 5%; animation-delay: 1.2s; }
+        .kw-3 { top: 45%; left: 45%; animation-delay: 2.5s; }
+        .kw-4 { bottom: 20%; left: 5%; animation-delay: 0.8s; }
+        .kw-5 { bottom: 10%; right: 10%; animation-delay: 1.8s; }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* ==============================
+           툴팁 (각주 & 태그 호버 공통)
+           ============================== */
+        .custom-tooltip {
+            position: absolute;
+            background-color: var(--text-main);
+            color: #FFFFFF;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.5;
+            max-width: 280px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px) translateX(-50%);
+            transition: opacity 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        visibility 0.3s;
+            pointer-events: none; 
+            white-space: pre-wrap;
+        }
+
+        .custom-tooltip.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) translateX(-50%);
+        }
+
+        .custom-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--text-main) transparent transparent transparent;
+        }
+
+        .custom-tooltip.bottom-tooltip {
+            transform: translateY(-15px) translateX(-50%);
+        }
+        .custom-tooltip.bottom-tooltip.show {
+            transform: translateY(0) translateX(-50%);
+        }
+        .custom-tooltip.bottom-tooltip::after {
+            top: auto;
+            bottom: 100%;
+            border-color: transparent transparent var(--text-main) transparent;
+        }
+
+        /* About Text Info */
+        .about-info-blocks {
+            display: flex;
+            flex-direction: column;
+            gap: 50px; 
+        }
+
+        .info-block h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-block h3::before {
+            content: '';
+            display: block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-yellow);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .info-block:hover h3::before {
+            transform: scale(1.5);
+        }
+
+        .info-block p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .tag {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: inline-block;
+            position: relative;
+        }
+
+        .tag:hover {
+            background-color: var(--accent-yellow);
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 4px 10px rgba(213, 179, 92, 0.3);
+        }
+
+        /* ==============================
+           Footer
+           ============================== */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ==============================
+           Animations
+           ============================== */
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==============================
+           Responsive
+           ============================== */
+        @media (max-width: 768px) {
+            .home-text h1 { font-size: 2.8rem; }
+            .home-text p { font-size: 1.1rem; }
+            .about-content { grid-template-columns: 1fr; gap: 20px; }
+            .nav-links { display: none; }
+            #about { margin: 0 0 40px 0; border-radius: 0; }
+            .bg-shape { display: none; } 
+            
+            /* 모바일에서 겹침 방지 */
+            .kw-1 { left: 5%; }
+            .kw-2 { right: 5%; }
+            .kw-3 { left: 35%; top: 40%; }
+            .kw-4 { bottom: 25%; left: 5%; }
+            .kw-5 { bottom: 5%; right: 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 스크롤 진행바 -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <!-- 커스텀 커서 -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- 배경 패럴랙스 도형 -->
+    <div class="bg-shape shape-1" id="shape1"></div>
+    <div class="bg-shape shape-2" id="shape2"></div>
+
+    <!-- 통합 툴팁 -->
+    <div class="custom-tooltip" id="global-tooltip"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <div class="logo inter-element">My Portfolio</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-item inter-element">Home</a></li>
+                <li><a href="#about" class="nav-item inter-element">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 1. Home Section (가운데 정렬된 텍스트 중심) -->
+    <section id="home">
+        <div class="container home-content">
+            <div class="home-text">
+                <h1>
+                    안녕하세요,<br>
+                    <span id="typing-text" class="highlight"></span><span class="typing-cursor"></span><br>
+                    <span>김민규</span>입니다.
+                </h1>
+                <p>저의 취향과 특기, 그리고 지금까지 배우고 기록해 온 과정들을 담은 공간입니다.</p>
+                <a href="#about" class="btn inter-element">나의 이야기 보기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title fade-up">About Me</h2>
+            <p class="section-subtitle fade-up">저를 소개하는 키워드와 관심사들입니다.</p>
+
+            <div class="about-content">
+                
+                <!-- 왼쪽: 둥둥 떠다니는 키워드 영역 -->
+                <div class="fade-up">
+                    <div class="keyword-cloud-container">
+                        <div class="float-kw kw-1 inter-element" data-info="호기심이 많아 새로운 것을 배우고 경험하는 것을 좋아합니다. 독서, 게임, 수집 등 관심 분야가 넓습니다.">취미부자</div>
+                        <div class="float-kw kw-2 inter-element" data-info="한 번 맡은 일은 끝까지 책임지고 완수하며, 주변 사람들에게 신뢰를 주는 것을 가장 중요하게 생각합니다.">믿을 만한</div>
+                        <div class="float-kw kw-3 inter-element" data-info="꾸준함의 힘을 믿습니다. 매일 조금씩이라도 발전하기 위해 노력하며 기록을 남기는 습관이 있습니다.">성실한</div>
+                        <div class="float-kw kw-4 inter-element" data-info="특정 분야에 깊이 파고드는 열정을 가지고 있습니다. 한 번 꽂힌 것에는 놀라운 집중력을 발휘합니다.">오타쿠</div>
+                        <div class="float-kw kw-5 inter-element" data-info="독립심이 강하고 혼자만의 시간을 가치 있게 쓸 줄 압니다. 스스로 동기를 부여하며 목표를 이뤄나갑니다.">혼자서 잘 살아요</div>
+                    </div>
+                </div>
+                
+                <!-- 오른쪽: 취미 및 특기 설명 영역 -->
+                <div class="about-info-blocks fade-up">
+                    
+                    <div class="info-block">
+                        <h3>취미 및 취향</h3>
+                        <p>제가 좋아하고 몰입하는 것들입니다. (마우스를 올려보세요)</p>
+                        <div class="tags">
+                            <span class="tag hover-tag inter-element" data-tooltip="📘 인생 책 리스트&#10;오발탄, 1984">독서</span>
+                            <span class="tag hover-tag inter-element" data-tooltip="📦 주요 수집품&#10;군 장비, 동전">수집</span>
+                            <span class="tag hover-tag inter-element" data-tooltip="🎮 즐겨하는 게임&#10;로블록스와 마인크래프트">게임</span>
+                            <span class="tag hover-tag inter-element" data-tooltip="🔫 kac ks-3는 최고존엄이다!">에어소프트</span>
+                            <span class="tag hover-tag inter-element" data-tooltip="🎬 역습의 샤아, 페트레이버, 에이티식스&#10;<<<-명작임 꼭 보십쇼">애니메이션</span>
+                        </div>
+                    </div>
+
+                    <div class="info-block">
+                        <h3>특기 & 다룰 수 있는 툴</h3>
+                        <p>학습하며 익힌 기술과 저만의 장점들입니다.</p>
+                        <div class="tags">
+                            <span class="tag hover-tag inter-element" data-tooltip="💻 주요 사용 기술&#10;HTML, CSS, C, Python&#10;(다 초보에요)">프로그래밍</span>
+                            <span class="tag hover-tag inter-element" data-tooltip="🎨 주력 분야&#10;손그림">그림</span>
+                            <span class="tag inter-element">정보탐색 능력</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 김민규. All rights reserved.</p>
+            <p style="margin-top: 8px; font-size: 0.8rem; color: #a09d96;">Designed with Dynamic Interactions</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // --- 1. Custom Cursor ---
+            const dot = document.getElementById("cursor-dot");
+            const outline = document.getElementById("cursor-outline");
+            const interElements = document.querySelectorAll("a, button, .inter-element, .tag, .float-kw");
+
+            window.addEventListener("mousemove", function(e) {
+                dot.style.left = e.clientX + "px";
+                dot.style.top = e.clientY + "px";
+                outline.style.left = e.clientX + "px";
+                outline.style.top = e.clientY + "px";
+            });
+
+            interElements.forEach(el => {
+                el.addEventListener("mouseenter", () => {
+                    outline.classList.add("cursor-hover");
+                });
+                el.addEventListener("mouseleave", () => {
+                    outline.classList.remove("cursor-hover");
+                });
+            });
+
+            // --- 2. Typing Effect ---
+            const typingText = document.getElementById("typing-text");
+            const words = ["원주고등학교 1학년"];
+            let wordIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let typeSpeed = 120;
+
+            function typeEffect() {
+                const currentWord = words[wordIndex];
+                
+                if (isDeleting) {
+                    typingText.textContent = currentWord.substring(0, charIndex - 1);
+                    charIndex--;
+                    typeSpeed = 60; 
+                } else {
+                    typingText.textContent = currentWord.substring(0, charIndex + 1);
+                    charIndex++;
+                    typeSpeed = 150; 
+                }
+
+                if (!isDeleting && charIndex === currentWord.length) {
+                    typeSpeed = 3000; 
+                    isDeleting = true;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    typeSpeed = 500; 
+                }
+
+                setTimeout(typeEffect, typeSpeed);
+            }
+            setTimeout(typeEffect, 1000);
+
+            // --- 3. 통합 툴팁 (클릭 각주 & 호버 팝업) 처리 ---
+            const globalTooltip = document.getElementById('global-tooltip');
+            const floatKws = document.querySelectorAll('.float-kw');
+            const hoverTags = document.querySelectorAll('.hover-tag');
+
+            // 3-1. 둥둥 떠다니는 키워드 (클릭)
+            floatKws.forEach(kw => {
+                kw.addEventListener('click', function(e) {
+                    e.stopPropagation(); 
+                    
+                    floatKws.forEach(k => k.classList.remove('active-kw'));
+                    this.classList.add('active-kw');
+
+                    const infoText = this.getAttribute('data-info');
+                    globalTooltip.innerHTML = infoText;
+                    globalTooltip.classList.remove('bottom-tooltip'); 
+
+                    const rect = this.getBoundingClientRect();
+                    const topPos = rect.top + window.scrollY - globalTooltip.offsetHeight - 15;
+                    const leftPos = rect.left + window.scrollX + (rect.width / 2);
+
+                    globalTooltip.style.top = `${topPos}px`;
+                    globalTooltip.style.left = `${leftPos}px`;
+                    globalTooltip.classList.add('show');
+                });
+            });
+
+            // 빈 화면 클릭 시
+            document.addEventListener('click', function() {
+                if(!globalTooltip.classList.contains('bottom-tooltip')) {
+                    globalTooltip.classList.remove('show');
+                    floatKws.forEach(k => k.classList.remove('active-kw'));
+                }
+            });
+
+            // 3-2. 태그 호버 시 팝업 (마우스 올림)
+            hoverTags.forEach(tag => {
+                tag.addEventListener('mouseenter', function(e) {
+                    const infoText = this.getAttribute('data-tooltip');
+                    if(!infoText) return;
+
+                    globalTooltip.innerHTML = infoText;
+                    globalTooltip.classList.add('bottom-tooltip'); 
+
+                    const rect = this.getBoundingClientRect();
+                    const topPos = rect.bottom + window.scrollY + 10;
+                    const leftPos = rect.left + window.scrollX + (rect.width / 2);
+
+                    globalTooltip.style.top = `${topPos}px`;
+                    globalTooltip.style.left = `${leftPos}px`;
+                    globalTooltip.classList.add('show');
+                });
+
+                tag.addEventListener('mouseleave', function() {
+                    globalTooltip.classList.remove('show');
+                    globalTooltip.classList.remove('bottom-tooltip');
+                });
+            });
+
+            // 스크롤 시 숨기기
+            window.addEventListener('scroll', function() {
+                globalTooltip.classList.remove('show');
+                globalTooltip.classList.remove('bottom-tooltip');
+                floatKws.forEach(k => k.classList.remove('active-kw'));
+            });
+
+            // --- 4. Scroll Progress & Navbar & Background Parallax ---
+            const navbar = document.getElementById('navbar');
+            const scrollProgress = document.getElementById('scroll-progress');
+            const shape1 = document.getElementById('shape1');
+            const shape2 = document.getElementById('shape2');
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('.nav-item');
+
+            window.addEventListener('scroll', () => {
+                let scrollTop = window.scrollY;
+                let docHeight = document.body.scrollHeight - window.innerHeight;
+                let scrollPercent = (scrollTop / docHeight) * 100;
+                
+                scrollProgress.style.width = scrollPercent + '%';
+
+                if (scrollTop > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+
+                if(window.innerWidth > 768) {
+                    shape1.style.transform = `translateY(${scrollTop * 0.3}px) translateX(${scrollTop * -0.1}px)`;
+                    shape2.style.transform = `translateY(${scrollTop * -0.2}px) translateX(${scrollTop * 0.2}px)`;
+                }
+
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === `#${current}`) {
+                        item.classList.add('active');
+                    }
+                });
+            });
+
+            // --- 5. Fade-up Animation ---
+            const fadeElements = document.querySelectorAll('.fade-up');
+            
+            const appearOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                });
+            }, appearOptions);
+
+            fadeElements.forEach(element => {
+                appearOnScroll.observe(element);
+            });
+            
+        });
+    </script>
+</body>
+</html>
